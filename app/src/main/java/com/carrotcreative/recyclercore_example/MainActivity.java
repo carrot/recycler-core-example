@@ -1,43 +1,77 @@
 package com.carrotcreative.recyclercore_example;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
+import com.carrotcreative.recyclercore.widget.ProgressRecyclerViewLayout;
+import com.carrotcreative.recyclercore_example.net.github.Github;
+import com.carrotcreative.recyclercore_example.net.github.models.GithubUser;
+import com.carrotcreative.recyclercore_example.recyclerviews.models.UserListRecyclerModel;
 
-public class MainActivity extends ActionBarActivity
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+public class MainActivity extends AppCompatActivity
 {
+    private ProgressRecyclerViewLayout mRecyclerViewLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mRecyclerViewLayout = (ProgressRecyclerViewLayout) findViewById(R.id.recycler_view_layout);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
+    protected void onStart()
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        super.onStart();
+        loadUsers("carrot");
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
+    private void loadUsers(String organization)
     {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        Github.api().getUsers(
+                organization,
+                new Callback<GithubUser[]>()
+                {
+                    @Override
+                    public void success(GithubUser[] githubUsers, Response response)
+                    {
+                        prepareUsers(githubUsers);
+                    }
 
-        //noinspection SimplifiableIfStatement
-        if(id == R.id.action_settings)
+                    @Override
+                    public void failure(RetrofitError error)
+                    {
+                        // TODO, handle
+                    }
+                }
+        );
+    }
+
+    private void prepareUsers(GithubUser[] githubUsers)
+    {
+        ArrayList<RecyclerCoreModel> models = new ArrayList<>();
+
+        // Converting all GithubUser objects
+        for(GithubUser githubUser : githubUsers)
         {
-            return true;
+            models.add(
+                    new UserListRecyclerModel()
+                            .setGithubUser(githubUser)
+            );
         }
 
-        return super.onOptionsItemSelected(item);
+        RecyclerCoreAdapter adapter = new RecyclerCoreAdapter(models);
+        mRecyclerViewLayout.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerViewLayout.setAdapter(adapter);
     }
 }
