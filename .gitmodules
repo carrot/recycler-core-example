@@ -1,0 +1,4 @@
+[submodule "recyclercore"]
+        path = recycler-core
+        url = git@github.com:carrot/recycler-core.git
+
