@@ -2,5 +2,6 @@
     <string name="app_name">recyclercore-example</string>
 
     <string name="action_empty_state">Flip Empty State</string>
-    <string name="button_try_again">Try Again</string>
+    <string name="button_no_data">Damn, no data?</string>
+    <string name="empty_state_toast_message">Set some models in the adapter to hide this view.</string>
 </resources>

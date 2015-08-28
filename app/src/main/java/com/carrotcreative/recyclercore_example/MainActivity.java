@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
@@ -36,7 +37,19 @@ public class MainActivity extends AppCompatActivity
 
         View emptyState = LayoutInflater.from(getApplicationContext()).inflate(R.layout.empty_state, null);
         mRecyclerViewLayout.setEmptyStateView(emptyState);
-        mRecyclerViewLayout.setEmptyStateEnabled(true);
+
+        /**
+         * set click listener on empty state.
+         */
+        emptyState.findViewById(R.id.empty_state_button)
+                .setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(getApplicationContext(), R.string.empty_state_toast_message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
