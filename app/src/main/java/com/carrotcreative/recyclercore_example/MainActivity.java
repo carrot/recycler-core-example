@@ -1,8 +1,11 @@
 package com.carrotcreative.recyclercore_example;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +51,22 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Toast.makeText(getApplicationContext(), R.string.empty_state_toast_message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mRecyclerViewLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
+        {
+            @Override
+            public void onRefresh()
+            {
+                new Handler().postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        mRecyclerViewLayout.refreshComplete();
+                    }
+                }, 1000);
             }
         });
     }
