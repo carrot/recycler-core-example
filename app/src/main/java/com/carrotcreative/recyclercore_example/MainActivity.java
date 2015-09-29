@@ -53,22 +53,6 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), R.string.empty_state_toast_message, Toast.LENGTH_SHORT).show();
             }
         });
-
-        mRecyclerViewLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
-        {
-            @Override
-            public void onRefresh()
-            {
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        mRecyclerViewLayout.refreshComplete();
-                    }
-                }, 1000);
-            }
-        });
     }
 
     @Override
