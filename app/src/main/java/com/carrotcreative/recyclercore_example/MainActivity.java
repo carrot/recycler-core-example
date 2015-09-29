@@ -3,6 +3,9 @@ package com.carrotcreative.recyclercore_example;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
@@ -20,6 +23,8 @@ import retrofit.client.Response;
 public class MainActivity extends AppCompatActivity
 {
     private ProgressRecyclerViewLayout mRecyclerViewLayout;
+    private View mErrorView;
+    private Button mTryAgainButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,12 +32,30 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mRecyclerViewLayout = (ProgressRecyclerViewLayout) findViewById(R.id.recycler_view_layout);
+
+        mErrorView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.element_error_state, null, false);
+
+        mTryAgainButton = (Button) mErrorView.findViewById(R.id.try_again);
+        mTryAgainButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mRecyclerViewLayout.setErrorStateEnabled( ! mRecyclerViewLayout.isShowingErrorState());
+                loadData();
+            }
+        });
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
+        loadData();
+    }
+
+    private void loadData()
+    {
         loadUsers("carrot");
     }
 
@@ -52,6 +75,7 @@ public class MainActivity extends AppCompatActivity
                     public void failure(RetrofitError error)
                     {
                         // TODO, handle
+                        mRecyclerViewLayout.setErrorStateEnabled(mErrorView, true);
                     }
                 }
         );
