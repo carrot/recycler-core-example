@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void failure(RetrofitError error)
                     {
-                        // TODO, handle
                         mRecyclerViewLayout.setErrorStateEnabled(true);
                     }
                 }
