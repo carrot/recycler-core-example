@@ -26,7 +26,10 @@ import retrofit.client.Response;
 public class MainActivity extends AppCompatActivity
 {
     private ProgressRecyclerViewLayout mRecyclerViewLayout;
+    private RecyclerCoreAdapter mRecyclerCoreAdapter;
+    private ArrayList<RecyclerCoreModel> mRecyclerCoreModels = new ArrayList<>();
     private Button mTryAgainButton;
+    private Button mLoadAgain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         mRecyclerViewLayout = (ProgressRecyclerViewLayout) findViewById(R.id.recycler_view_layout);
 
+        /**
+         * Error View
+         */
         View errorView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.element_error_state, null, false);
         mRecyclerViewLayout.setErrorView(errorView);
 
@@ -45,6 +51,21 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 mRecyclerViewLayout.setErrorStateEnabled( ! mRecyclerViewLayout.isErrorStateEnabled());
+                loadData();
+            }
+        });
+
+        /**
+         * Empty View
+         */
+        View emptyView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.element_empty_state, null, false);
+        mRecyclerViewLayout.setEmptyStateView(emptyView);
+        mLoadAgain = (Button) emptyView.findViewById(R.id.load_again);
+        mLoadAgain.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
                 loadData();
             }
         });
@@ -66,6 +87,18 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_error:
                 mRecyclerViewLayout.setErrorStateEnabled(true);
                 return true;
+
+            case R.id.action_empty:
+            {
+                if(! mRecyclerCoreModels.isEmpty())
+                {
+                    mRecyclerCoreModels.clear();
+                    mRecyclerCoreAdapter.notifyDataSetChanged();
+                }
+                return true;
+            }
+            default:
+                // Do nothing
         }
         return super.onOptionsItemSelected(item);
     }
@@ -105,19 +138,24 @@ public class MainActivity extends AppCompatActivity
 
     private void prepareUsers(GithubUser[] githubUsers)
     {
-        ArrayList<RecyclerCoreModel> models = new ArrayList<>();
-
         // Converting all GithubUser objects
         for(GithubUser githubUser : githubUsers)
         {
-            models.add(
+            mRecyclerCoreModels.add(
                     new UserListRecyclerModel()
                             .setGithubUser(githubUser)
             );
         }
 
-        RecyclerCoreAdapter adapter = new RecyclerCoreAdapter(models);
-        mRecyclerViewLayout.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerViewLayout.setAdapter(adapter);
+        if(mRecyclerCoreAdapter == null)
+        {
+            mRecyclerCoreAdapter = new RecyclerCoreAdapter(mRecyclerCoreModels);
+            mRecyclerViewLayout.setLayoutManager(new LinearLayoutManager(this));
+            mRecyclerViewLayout.setAdapter(mRecyclerCoreAdapter);
+        }
+        else
+        {
+            mRecyclerCoreAdapter.notifyDataSetChanged();
+        }
     }
 }
