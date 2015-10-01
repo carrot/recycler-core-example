@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
-import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
 import com.carrotcreative.recyclercore.widget.ProgressRecyclerViewLayout;
 import com.carrotcreative.recyclercore_example.net.github.Github;
 import com.carrotcreative.recyclercore_example.net.github.models.GithubUser;
@@ -138,11 +137,13 @@ public class MainActivity extends AppCompatActivity
 
     private void prepareUsers(GithubUser[] githubUsers)
     {
+        ArrayList<Object> models = new ArrayList<>();
+
         // Converting all GithubUser objects
         for(GithubUser githubUser : githubUsers)
         {
-            mRecyclerCoreModels.add(
-                    new UserListRecyclerModel()
+            models.add(
+                    new UserListRecyclerModel("wd")
                             .setGithubUser(githubUser)
             );
         }
