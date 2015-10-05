@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity
 {
     private ProgressRecyclerViewLayout mRecyclerViewLayout;
     private RecyclerCoreAdapter mRecyclerCoreAdapter;
-    private ArrayList<RecyclerCoreModel> mRecyclerCoreModels = new ArrayList<>();
+    private ArrayList<Object> mRecyclerCoreModels = new ArrayList<>();
     private Button mTryAgainButton;
     private Button mLoadAgain;
 
@@ -137,12 +137,11 @@ public class MainActivity extends AppCompatActivity
 
     private void prepareUsers(GithubUser[] githubUsers)
     {
-        ArrayList<Object> models = new ArrayList<>();
-
+        mRecyclerCoreModels.clear();
         // Converting all GithubUser objects
         for(GithubUser githubUser : githubUsers)
         {
-            models.add(
+            mRecyclerCoreModels.add(
                     new UserListRecyclerModel()
                             .setGithubUser(githubUser)
             );
