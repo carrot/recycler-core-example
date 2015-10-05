@@ -10,11 +10,6 @@ public class UserListRecyclerModel
 {
     GithubUser mGithubUser;
 
-    public UserListRecyclerModel(String x)
-    {
-
-    }
-
     public GithubUser getGithubUser()
     {
         return mGithubUser;

@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
         for(GithubUser githubUser : githubUsers)
         {
             models.add(
-                    new UserListRecyclerModel("wd")
+                    new UserListRecyclerModel()
                             .setGithubUser(githubUser)
             );
         }
