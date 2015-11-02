@@ -1,1 +1,1 @@
-include ':app', ':recycler-core'
+include ':app', ':recycler-core', ':recyclercore-annotations', ':recyclercore-compiler'
